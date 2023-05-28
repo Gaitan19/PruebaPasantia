@@ -12,8 +12,3 @@ estadoEli bit default 1  --0 es eliminado
 )
 Go
 
-insert into Tareas(titulo)
-Values
-('Realizar pruebas')
-
-select * from Tareas
