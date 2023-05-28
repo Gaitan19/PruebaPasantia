@@ -1,4 +1,5 @@
  using TareasAPI.Data;
+ using TareasAPI.Services;
  
  
  var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,8 @@ builder.Services.AddSwaggerGen();
 
 //dbContext
 builder.Services.AddSqlServer<GtareasContext>(builder.Configuration.GetConnectionString("TareaConnection"));
+//Service
+builder.Services.AddScoped<TareaService>();
 
 var app = builder.Build();
 

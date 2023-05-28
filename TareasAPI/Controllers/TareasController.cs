@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using TareasAPI.Data;
+using TareasAPI.Services;
 using TareasAPI.Data.TareaModels;
 
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace TareasAPI.Controllers;
 
@@ -11,20 +10,18 @@ namespace TareasAPI.Controllers;
 [Route("[controller]")]
 public class TareasController: ControllerBase
 {
-    private readonly GtareasContext _context;
+    private readonly TareaService _service;
 
-    public TareasController(GtareasContext context)
+    public TareasController(TareaService service)
     {
-        _context = context;
+        _service = service;
     }
 
     [HttpGet]
     public IEnumerable<Tarea> Get()
     {
-        var result = _context.Tareas
-        .Where(t => (t.EstadoEli & true) == true).ToList();
 
-    return (IEnumerable<Tarea>)result;
+        return _service.GetAll();
     }
 
 
@@ -33,10 +30,8 @@ public class TareasController: ControllerBase
     
     public IEnumerable<Tarea>GetDeletedTasks()
     {
-         var result = _context.Tareas
-        .Where(t => (t.EstadoEli ) == false).ToList();
-
-        return result;
+    
+        return _service.GetAllDeletedTasks();
     }
     
  
@@ -44,7 +39,7 @@ public class TareasController: ControllerBase
     [HttpGet("{id}")]
     public ActionResult<Tarea> GetById(int id)
     {
-        var tarea = _context.Tareas.FirstOrDefault(t => t.IdTarea == id && (t.EstadoEli & true) == true);;
+        var tarea = _service.GetById(id);
         if (tarea is null)
             return NotFound();
 
@@ -56,7 +51,7 @@ public class TareasController: ControllerBase
     //Aqui podemos buscar una tarea en especifico que este eliminada
     public ActionResult<Tarea> GetDeletedTasksById(int id)
     {
-        var tarea = _context.Tareas.FirstOrDefault(t => t.IdTarea == id && (t.EstadoEli) == false);
+        var tarea = _service.GetDeletedTasksById(id);
         if (tarea is null)
             return NotFound();
 
@@ -67,10 +62,9 @@ public class TareasController: ControllerBase
     [HttpPost]
     public IActionResult Create(Tarea tarea)
     {
-        _context.Tareas.Add(tarea);
-        _context.SaveChanges();
+       var newTarea = _service.Create(tarea);
 
-        return CreatedAtAction(nameof(GetById), new {id = tarea.IdTarea}, tarea);
+        return CreatedAtAction(nameof(GetById), new {id = tarea.IdTarea}, newTarea);
     }
 
     [HttpPut("{id}")]
@@ -79,17 +73,17 @@ public class TareasController: ControllerBase
         if (id != tarea.IdTarea)
             return BadRequest(); 
 
-        var existingTarea = _context.Tareas.Find(id);
-        if(existingTarea is null)
+        var TareaUpdate = _service.GetById(id);
+
+        if (TareaUpdate is not null)
+        {
+            _service.Update(id,tarea);
+            return NoContent();
+        } 
+        else
+        {
             return NotFound();
-
-        existingTarea.Titulo = tarea.Titulo;
-        existingTarea.Estado = tarea.Estado;
-        existingTarea.EstadoEli = tarea.EstadoEli;
-
-        _context.SaveChanges();
-
-        return CreatedAtAction(nameof(GetById), new {id = tarea.IdTarea}, tarea);    
+        } 
         //return NoContent();
     }
 
@@ -97,17 +91,19 @@ public class TareasController: ControllerBase
     public IActionResult Delete(int id)
     {
 
-        var tarea = _context.Tareas.Find(id);
-        if (tarea is null)
-            return NotFound();
+        
 
-        if (tarea.EstadoEli == true)
+        var TareaDelete = _service.GetByIdTarea(id);
+
+        if (TareaDelete is not null)
         {
-            tarea.EstadoEli = false;
-            _context.SaveChanges();
-        }    
-
-        return NoContent();
+            _service.Delete(id);
+            return NoContent();
+        } 
+        else
+        {
+            return NotFound();
+        } 
     }
 
 
