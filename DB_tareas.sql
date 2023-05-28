@@ -11,3 +11,9 @@ estado bit default 1,  --1 es para incompleta y 0 para completada
 estadoEli bit default 1  --0 es eliminado
 )
 Go
+
+insert into Tareas(titulo)
+Values
+('Realizar pruebas')
+
+select * from Tareas

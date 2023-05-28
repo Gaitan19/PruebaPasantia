@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TareasAPI.Data.TareaModels;
 
+
+
+using System.Linq;
+
 namespace TareasAPI.Data;
 
 public partial class GtareasContext : DbContext
@@ -16,22 +20,32 @@ public partial class GtareasContext : DbContext
     {
     }
 
-    public virtual DbSet<Tarea> Tareas { get; set; }
+    public virtual DbSet<Tarea> Tareas { get; set; } = null!;
 
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+       
+
         modelBuilder.Entity<Tarea>(entity =>
         {
+           
+          
+           
             entity.HasKey(e => e.IdTarea).HasName("PK__Tareas__756A540249EA8598");
 
             entity.Property(e => e.IdTarea).HasColumnName("idTarea");
+            
             entity.Property(e => e.Estado)
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("estado");
+            
+            
             entity.Property(e => e.EstadoEli)
                 .HasDefaultValueSql("((1))")
                 .HasColumnName("estadoEli");
+            
             entity.Property(e => e.Titulo)
                 .HasMaxLength(100)
                 .IsUnicode(false)

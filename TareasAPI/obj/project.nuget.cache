@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "da99X7evztpBBUXYWqT3ex5H2dJwWwvVh1Lq/YnJAOTJOYwKL/KVlH3UjrLqGOO4I1zNdQMhBgUbNX6oWBrHGA==",
+  "dgSpecHash": "UUFZZAllCfpN/y4UJXzusrtVohBOGNU5Ul3hB9sRRH9SPbmlx396Ci/V0wACAOycglKk3KBGoSlv8UeZLYjNOA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Kenet Gaitan\\Desktop\\PruebaPasantia\\TareasAPI\\TareasAPI.csproj",
   "expectedPackageFiles": [
@@ -44,6 +44,7 @@
     "C:\\Users\\Kenet Gaitan\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
     "C:\\Users\\Kenet Gaitan\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "C:\\Users\\Kenet Gaitan\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\Kenet Gaitan\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\Kenet Gaitan\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
     "C:\\Users\\Kenet Gaitan\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
     "C:\\Users\\Kenet Gaitan\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
