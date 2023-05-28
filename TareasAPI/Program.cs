@@ -1,5 +1,7 @@
  using TareasAPI.Data;
  using TareasAPI.Services;
+
+ using Newtonsoft.Json;
  
  
  var builder = WebApplication.CreateBuilder(args);

@@ -37,9 +37,9 @@ public partial class GtareasContext : DbContext
 
             entity.Property(e => e.IdTarea).HasColumnName("idTarea");
             
-            entity.Property(e => e.Estado)
+            entity.Property(e => e.estado_no_Completado)
                 .HasDefaultValueSql("((1))")
-                .HasColumnName("estado");
+                .HasColumnName("estado_no_Completado");
             
             
             entity.Property(e => e.EstadoEli)
