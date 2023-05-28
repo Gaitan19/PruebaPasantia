@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TareasAPI.Services;
 using TareasAPI.Data.TareaModels;
-
+using Microsoft.EntityFrameworkCore;
 
 
 namespace TareasAPI.Controllers;
@@ -18,30 +18,30 @@ public class TareasController: ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<Tarea> Get()
+    public async Task<IEnumerable<Tarea>> Get()
     {
 
-        return _service.GetAll();
+        return await _service.GetAll();
     }
 
 
 //Listamos solo los que estan eliminados
     [HttpGet("deleted")]
     
-    public IEnumerable<Tarea>GetDeletedTasks()
+    public async Task<IEnumerable<Tarea>> GetDeletedTasks()
     {
     
-        return _service.GetAllDeletedTasks();
+        return await _service.GetAllDeletedTasks();
     }
     
  
    //Aqui podemos buscar una tarea en especifico que no este eliminada
     [HttpGet("{id}")]
-    public ActionResult<Tarea> GetById(int id)
+    public async Task<ActionResult<Tarea>> GetById(int id)
     {
-        var tarea = _service.GetById(id);
+        var tarea = await _service.GetById(id);
         if (tarea is null)
-            return NotFound();
+            return TareaNotFound(id);
 
         return tarea;      
     }
@@ -49,62 +49,68 @@ public class TareasController: ControllerBase
 
     [HttpGet("deleted/{id}")]
     //Aqui podemos buscar una tarea en especifico que este eliminada
-    public ActionResult<Tarea> GetDeletedTasksById(int id)
+    public async Task<ActionResult<Tarea>> GetDeletedTasksById(int id)
     {
-        var tarea = _service.GetDeletedTasksById(id);
+        var tarea = await _service.GetDeletedTasksById(id);
         if (tarea is null)
-            return NotFound();
+            return TareaNotFound(id);
 
         return tarea;      
     }
 
 
     [HttpPost]
-    public IActionResult Create(Tarea tarea)
+    public async Task< IActionResult> Create(Tarea tarea)
     {
-       var newTarea = _service.Create(tarea);
+       var newTarea = await _service.Create(tarea);
 
         return CreatedAtAction(nameof(GetById), new {id = tarea.IdTarea}, newTarea);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, Tarea tarea)
+    public async Task<IActionResult> Update(int id, Tarea tarea)
     {
         if (id != tarea.IdTarea)
-            return BadRequest(); 
+            return BadRequest(new {message = $"El ID({id}) no coincide con el ID({tarea.IdTarea}) del cuerpo de la solicitud"}); 
 
-        var TareaUpdate = _service.GetById(id);
+        var TareaUpdate = await _service.GetById(id);
 
         if (TareaUpdate is not null)
         {
-            _service.Update(id,tarea);
+           await _service.Update(id,tarea);
             return NoContent();
         } 
         else
         {
-            return NotFound();
+            return TareaNotFound(id);
         } 
         //return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
 
         
 
-        var TareaDelete = _service.GetByIdTarea(id);
+        var TareaDelete = await _service.GetByIdTarea(id);
 
         if (TareaDelete is not null)
         {
-            _service.Delete(id);
+            await _service.Delete(id);
             return NoContent();
         } 
         else
         {
-            return NotFound();
+            return TareaNotFound(id);
         } 
     }
 
+
+    public NotFoundObjectResult TareaNotFound(int id)
+    {
+        return NotFound(new {message = $"La tarea con ID = {id} no existe"});
+        
+    }
 
 }

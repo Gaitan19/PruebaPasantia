@@ -1,6 +1,6 @@
 using TareasAPI.Data;
 using TareasAPI.Data.TareaModels;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace TareasAPI.Services;
 
@@ -16,86 +16,78 @@ public class TareaService
 
     //Metodo para obtener
 
-    public IEnumerable<Tarea> GetAll()
+    public async Task<IEnumerable<Tarea>> GetAll()
     {
-        var result = _context.Tareas
-        .Where(t => (t.EstadoEli & true) == true).ToList();
+       
+        return await _context.Tareas.Where(t => (t.EstadoEli & true) == true).ToListAsync();
 
-    return (IEnumerable<Tarea>)result;
     }
 
-    public IEnumerable<Tarea>GetAllDeletedTasks()
+    public async Task<IEnumerable<Tarea>> GetAllDeletedTasks()
     {
-         var result = _context.Tareas
-        .Where(t => (t.EstadoEli ) == false).ToList();
-
-        return result;
+        return await _context.Tareas.Where(t => (t.EstadoEli ) == false).ToListAsync();
     }
 
     //Metodo para obtener por id
 
-    public Tarea? GetByIdTarea(int id)
+    public async Task<Tarea?> GetByIdTarea(int id)
     {
-        var tarea = _context.Tareas.FirstOrDefault(t => t.IdTarea == id);
-        
-        return tarea;      
+
+        return await _context.Tareas.FirstOrDefaultAsync(t => t.IdTarea == id);    
     }
 
 
-    public Tarea? GetById(int id)
+    public async Task<Tarea?> GetById(int id)
     {
-        var tarea = _context.Tareas.FirstOrDefault(t => t.IdTarea == id && (t.EstadoEli & true) == true);
-        
-        return tarea;      
+      
+        return await _context.Tareas.FirstOrDefaultAsync(t => t.IdTarea == id && (t.EstadoEli & true) == true);     
     }
 
-    public Tarea? GetDeletedTasksById(int id)
+    public async Task<Tarea?> GetDeletedTasksById(int id)
     {
-        var tarea = _context.Tareas.FirstOrDefault(t => t.IdTarea == id && (t.EstadoEli) == false);
-
-        return tarea;      
+        return await _context.Tareas.FirstOrDefaultAsync(t => t.IdTarea == id && (t.EstadoEli) == false);   
     }
 
     //Metodo para crear
-    public Tarea Create(Tarea newTarea)
+    public async Task<Tarea?> Create(Tarea newTarea)
     {
         _context.Tareas.Add(newTarea);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return newTarea;
         
     }
 
     //Metodo para Actualizar
-    public void Update(int id, Tarea tarea)
+    public async Task Update(int id, Tarea tarea)
     { 
 
-        var existingTarea = GetById(id);
+        var existingTarea = await GetById(id);
         if(existingTarea is not null)
         {
             existingTarea.Titulo = tarea.Titulo;
             existingTarea.Estado = tarea.Estado;
             existingTarea.EstadoEli = tarea.EstadoEli;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
         
     }
 
-    public void Delete(int id)
+    public async Task Delete(int id)
     {
 
-        var tarea = _context.Tareas.Find(id);
+        var tarea = await _context.Tareas.FindAsync(id);
         if (tarea is not null)
         {
             if (tarea.EstadoEli == true)
             {
                 tarea.EstadoEli = false;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             else
             {
                 _context.Tareas.Remove(tarea);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }    
         }
         
