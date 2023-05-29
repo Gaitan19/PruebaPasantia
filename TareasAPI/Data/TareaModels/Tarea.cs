@@ -1,7 +1,5 @@
-﻿
-using System.ComponentModel.DataAnnotations;
-
-
+﻿using System;
+using System.Collections.Generic;
 
 namespace TareasAPI.Data.TareaModels;
 
@@ -9,14 +7,9 @@ public partial class Tarea
 {
     public int IdTarea { get; set; }
 
-    [MaxLength(100, ErrorMessage = "La tarea debe de ser menor a 100 caracteres")]
     public string? Titulo { get; set; }
 
-    
-    
-    
-    public bool? estado_no_Completado { get; set; }
+    public bool? EstadoNoCompletado { get; set; }
 
-    [System.Text.Json.Serialization.JsonIgnore]
     public bool? EstadoEli { get; set; }
 }

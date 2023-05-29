@@ -66,7 +66,7 @@ public class TareaService
         if(existingTarea is not null)
         {
             existingTarea.Titulo = tarea.Titulo;
-            existingTarea.estado_no_Completado = tarea.estado_no_Completado;
+            existingTarea.EstadoNoCompletado = tarea.EstadoNoCompletado;
             await _context.SaveChangesAsync();
         }
         

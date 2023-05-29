@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TareasAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class TareasController: ControllerBase
 {
     private readonly TareaService _service;
@@ -17,7 +17,7 @@ public class TareasController: ControllerBase
         _service = service;
     }
 
-    [HttpGet]
+    [HttpGet("getall")]
     public async Task<IEnumerable<Tarea>> Get()
     {
 
@@ -25,18 +25,8 @@ public class TareasController: ControllerBase
     }
 
 
-//Listamos solo los que estan eliminados
-    [HttpGet("deleted")]
-    
-    public async Task<IEnumerable<Tarea>> GetDeletedTasks()
-    {
-    
-        return await _service.GetAllDeletedTasks();
-    }
-    
- 
-   //Aqui podemos buscar una tarea en especifico que no este eliminada
-    [HttpGet("{id}")]
+    //Aqui podemos buscar una tarea en especifico que no este eliminada
+    [HttpGet("getall/{id}")]
     public async Task<ActionResult<Tarea>> GetById(int id)
     {
         var tarea = await _service.GetById(id);
@@ -45,9 +35,20 @@ public class TareasController: ControllerBase
 
         return tarea;      
     }
+
+
+//Listamos solo los que estan eliminados
+    [HttpGet("getalldeleted")]
+    
+    public async Task<IEnumerable<Tarea>> GetDeletedTasks()
+    {
+    
+        return await _service.GetAllDeletedTasks();
+    }
+    
  
 
-    [HttpGet("deleted/{id}")]
+    [HttpGet("getalldeleted/{id}")]
     //Aqui podemos buscar una tarea en especifico que este eliminada
     public async Task<ActionResult<Tarea>> GetDeletedTasksById(int id)
     {
@@ -59,7 +60,7 @@ public class TareasController: ControllerBase
     }
 
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task< IActionResult> Create(Tarea tarea)
     {
        var newTarea = await _service.Create(tarea);
@@ -67,7 +68,7 @@ public class TareasController: ControllerBase
         return CreatedAtAction(nameof(GetById), new {id = tarea.IdTarea}, newTarea);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("update/{id}")]
     public async Task<IActionResult> Update(int id, Tarea tarea)
     {
         if (id != tarea.IdTarea)
@@ -87,7 +88,7 @@ public class TareasController: ControllerBase
         //return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete/{id}")]
     public async Task<IActionResult> Delete(int id)
     {
 
