@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using TareasAPI.Services;
 using TareasAPI.Data.TareaModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace TareasAPI.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class TareasController: ControllerBase
@@ -59,7 +61,7 @@ public class TareasController: ControllerBase
         return tarea;      
     }
 
-
+    [Authorize(Policy = "SuperAdmin")]
     [HttpPost("create")]
     public async Task< IActionResult> Create(Tarea tarea)
     {
@@ -68,6 +70,7 @@ public class TareasController: ControllerBase
         return CreatedAtAction(nameof(GetById), new {id = tarea.IdTarea}, newTarea);
     }
 
+    [Authorize(Policy = "SuperAdmin")]
     [HttpPut("update/{id}")]
     public async Task<IActionResult> Update(int id, Tarea tarea)
     {
@@ -88,6 +91,7 @@ public class TareasController: ControllerBase
         //return NoContent();
     }
 
+    [Authorize(Policy = "SuperAdmin")]
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> Delete(int id)
     {

@@ -37,35 +37,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             
-            
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = GetSymmetricSecurityKey(builder.Configuration),
+            //IssuerSigningKey = GetSymmetricSecurityKey(builder.Configuration),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])),
             ValidateIssuer = false,
             ValidateAudience = false
-            
+
         };
-    }
-    );
+    });
+
+builder.Services.AddAuthorization(options => 
+{
+    options.AddPolicy("SuperAdmin", policy => policy.RequireClaim("AdminTipo", "Super"));
+});
 
 var app = builder.Build();
 
 
 //
 
-static SymmetricSecurityKey GetSymmetricSecurityKey(IConfiguration configuration)
-{
-    var keyValue = configuration.GetSection("JWT:key").Value;
-    
-
-    if (keyValue is null)
-    {
-        keyValue = null!;
-    }
-   
-    var keyBytes = Encoding.UTF8.GetBytes(keyValue);
-    
-    return new SymmetricSecurityKey(keyBytes);
-}
 //
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -75,6 +65,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

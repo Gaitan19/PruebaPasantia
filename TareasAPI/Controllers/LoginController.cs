@@ -40,7 +40,8 @@ public class LoginController : ControllerBase
         var claims = new[]
         {
             new Claim(ClaimTypes.Name, admin.Nombre),
-            new Claim(ClaimTypes.Email, admin.Correo)
+            new Claim(ClaimTypes.Email, admin.Correo),
+            new Claim("AdminTipo" , admin.AdminTipo)
         };
 
 
