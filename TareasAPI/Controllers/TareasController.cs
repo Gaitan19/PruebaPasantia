@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using TareasAPI.Services;
 using TareasAPI.Data.TareaModels;
-using Microsoft.EntityFrameworkCore;
+
 using Microsoft.AspNetCore.Authorization;
 
-
+using Swashbuckle.AspNetCore.Annotations;
 namespace TareasAPI.Controllers;
 
 [Authorize]
@@ -19,7 +19,9 @@ public class TareasController: ControllerBase
         _service = service;
     }
 
+    
     [HttpGet("getall")]
+    [SwaggerOperation("Obtiene todas las tareas")]
     public async Task<IEnumerable<Tarea>> Get()
     {
 
@@ -63,6 +65,7 @@ public class TareasController: ControllerBase
 
     [Authorize(Policy = "SuperAdmin")]
     [HttpPost("create")]
+    [SwaggerOperation("Crea una nueva tarea")]
     public async Task< IActionResult> Create(Tarea tarea)
     {
        var newTarea = await _service.Create(tarea);
@@ -72,6 +75,7 @@ public class TareasController: ControllerBase
 
     [Authorize(Policy = "SuperAdmin")]
     [HttpPut("update/{id}")]
+     [SwaggerOperation("Actualiza una tarea existente")]
     public async Task<IActionResult> Update(int id, Tarea tarea)
     {
         if (id != tarea.IdTarea)
@@ -93,6 +97,7 @@ public class TareasController: ControllerBase
 
     [Authorize(Policy = "SuperAdmin")]
     [HttpDelete("delete/{id}")]
+    [SwaggerOperation("Elimina una tarea")]
     public async Task<IActionResult> Delete(int id)
     {
 
@@ -111,7 +116,7 @@ public class TareasController: ControllerBase
         } 
     }
 
-
+    [HttpGet]
     public NotFoundObjectResult TareaNotFound(int id)
     {
         return NotFound(new {message = $"La tarea con ID = {id} no existe"});

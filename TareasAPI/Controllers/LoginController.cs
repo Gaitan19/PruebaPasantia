@@ -6,6 +6,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace TareasAPI.Controllers;
 
@@ -22,6 +23,7 @@ public class LoginController : ControllerBase
     }
 
     [HttpPost("authenticate")]
+    [SwaggerOperation("Autenticar un administrador")]
     public async Task<IActionResult> Login(AdminDto adminDto)
     {
         var admin = await loginService.GetAdmin(adminDto);
